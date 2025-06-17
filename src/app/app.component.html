@@ -1,13 +1,29 @@
 <div class="form-container">
   <h1 class="form-title">{{ config.Title }}</h1>
   <h2 class="form-subtitle">{{ config.Subtitle }}</h2>
-  <div class="form-fields">
-    <ng-container *ngFor="let field of config.Fields">
-      <ng-container [ngSwitch]="field.Type">
-        <h1 *ngSwitchCase="'H1'" class="field-heading">{{ field.Text }}</h1>
-        <input *ngSwitchCase="'Text'" type="text" [id]="field.ID" [(ngModel)]="formData[field.ID || '']" [placeholder]="field.Placeholder || ''" class="text-input">
-        <button *ngSwitchCase="'Button'" (click)="showAlert(field.AlertMessage || '')" class="button">{{ field.Title }}</button>
-      </ng-container>
-    </ng-container>
-  </div>
+  <form [formGroup]="formGroup" class="form-fields">
+    @for (field of config.Fields; track field.ID || field.Type + field.Text) {
+      @switch (field.Type) {
+        @case ('H1') {
+          <h1 class="field-heading">{{ field.Text }}</h1>
+        }
+        @case ('Text') {
+          <input
+            type="text"
+            [id]="field.ID"
+            [formControlName]="field.ID!"
+            [placeholder]="field.Placeholder || ''"
+            class="text-input"
+          >
+        }
+        @case ('Button') {
+          <button
+            type="button"
+            (click)="showAlert(field.AlertMessage || '')"
+            class="button"
+          >{{ field.Title }}</button>
+        }
+      }
+    }
+  </form>
 </div>

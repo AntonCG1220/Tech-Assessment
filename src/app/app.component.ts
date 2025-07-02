@@ -9,6 +9,11 @@ interface Field {
   Placeholder?: string;
   Title?: string;
   AlertMessage?: string;
+  VisibleCondition?: {
+    ID: string;
+    Operator: string;
+    Value: string;
+  }
 }
 
 interface FormConfig {
@@ -39,7 +44,8 @@ export class AppComponent {
             { ID: 'hello-button',
               Type: 'Button', 
               Title: 'Say hi', 
-              AlertMessage: 'Hello ${person-name}' 
+              AlertMessage: 'Hello ${person-name}',
+              VisibleCondition: { ID: 'person-name', Operator: 'Equals', Value: 'peter' }
             }
           ]
         };
@@ -60,5 +66,10 @@ export class AppComponent {
       message = message.replace(`\${${id}}`, this.formGroup.value[id] || '');
     }
     alert(message);
+  }
+
+  isButtonVisible(): boolean {
+    const personName = this.formGroup.get('person-name')?.value || '';
+    return personName.toLocaleLowerCase() === 'peter';
   }
 }

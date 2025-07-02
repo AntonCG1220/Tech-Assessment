@@ -19,6 +19,7 @@
         @case ('Button') {
           <button
             type="button"
+            *ngIf="isButtonVisible()"
             (click)="showAlert(field.AlertMessage || '')"
             class="button"
           >{{ field.Title }}</button>
